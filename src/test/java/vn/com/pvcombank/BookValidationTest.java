@@ -26,7 +26,7 @@ class BookValidationTest {
     @Test
     void whenAllFieldsCorrectThenValidationSuccess() {
 
-        Book book = new Book("1234567890", "title", "author", 10.0);
+        Book book = Book.of("1234567890", "title", "author", 10.0, "publisher");
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         assert(violations.isEmpty());
     }
@@ -34,7 +34,7 @@ class BookValidationTest {
     @Test
     void whenIsbnDefinedButIncorrectThenValidationFailure() {
 
-        Book book = new Book("abcd", "title", "author", 10.0);
+        Book book = Book.of("abcd", "title", "author", 10.0, "publisher");
         Set<ConstraintViolation<Book>> violations = validator.validate(book);
         assertThat(violations).hasSize(1);
         assertThat(violations.iterator().next().getMessage()).isEqualTo("The ISBN format must be valid.");
