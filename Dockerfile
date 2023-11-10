@@ -1,5 +1,17 @@
-FROM openjdk:17
-COPY ./target/catalog-service-0.0.1-SNAPSHOT.jar /usr/src/catalog/
-WORKDIR /usr/src/catalog
-EXPOSE 8080
-CMD ["java", "-jar", "catalog-service-0.0.1-SNAPSHOT.jar"]
+FROM eclipse-temurin:17 AS builder
+WORKDIR workspace
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} catalog-service.jar
+RUN java -Djarmode=layertools -jar catalog-service.jar extract
+
+FROM eclipse-temurin:17
+RUN useradd spring
+USER spring
+WORKDIR workspace
+COPY --from=builder workspace/dependencies/ ./
+COPY --from=builder workspace/spring-boot-loader/ ./
+COPY --from=builder workspace/snapshot-dependencies/ ./
+COPY --from=builder workspace/application/ ./
+
+ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+
