@@ -1,0 +1,10 @@
+pvcombank:
+  greeting: Welcome to the book catalog from a development Kubernetes environment quycx@pvcombank.com.vn!
+spring:
+  datasource:
+    url: jdbc:postgresql://pvcombank-postgres/pvcombank_catalog
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://pvcombank-keycloak/realms/pvcombank

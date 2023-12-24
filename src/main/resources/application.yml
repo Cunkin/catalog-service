@@ -14,9 +14,11 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 15s
   config:
-    import: "optional:configserver:"
+#    import: "optional:configserver:"
+    import: ""
   cloud:
     config:
+      enabled: false
       uri: http://localhost:8888
       request-connect-timeout: 5000
       request-read-timeout: 5000
@@ -34,13 +36,31 @@ spring:
     hikari:
       connection-timeout: 2000
       maximum-pool-size: 5
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/pvcombank
 
 management:
   endpoints:
     web:
       exposure:
-        include: refresh
+        include: flyway, health, prometheus
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
 
 pvcombank:
   greeting: Welcome to the local book catalog!
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
 

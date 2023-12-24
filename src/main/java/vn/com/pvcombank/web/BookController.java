@@ -2,11 +2,13 @@ package vn.com.pvcombank.web;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import vn.com.pvcombank.domain.Book;
 import vn.com.pvcombank.domain.BookService;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/books")
@@ -16,6 +18,8 @@ public class BookController {
 
     @GetMapping
     public Iterable<Book> get() {
+
+        log.info("Fetching the list of books in the catalog");
         return bookService.viewBookList();
     }
 
